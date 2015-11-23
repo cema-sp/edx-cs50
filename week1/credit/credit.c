@@ -65,26 +65,19 @@ int main(void)
 
 int calculateCS(long long cardNumber, int length)
 {
-    int headDigit = 0;
-    long long tailDigits = cardNumber;
-    long long divider = (long long) pow(10, length - 1);
+    long long initDigits = cardNumber;
+    int lastDigit = 0;
 
-    bool isFirst = true;
+    bool isEven = false;
     int checkSum = 0;
     do
     {
-        headDigit = (int) (tailDigits / divider);
-        tailDigits = tailDigits % divider;
-        divider /= 10;
+        lastDigit = (int) (initDigits % 10);
+        initDigits /= 10;
 
-        if (isFirst == true)
+        if (isEven == true)
         {
-            checkSum += headDigit;
-            isFirst = false;
-        }
-        else
-        {
-            int doubled = headDigit * 2;
+            int doubled = lastDigit * 2;
             if (doubled / 10 > 0)
             {
                 checkSum += doubled / 10 + doubled % 10;
@@ -93,17 +86,20 @@ int calculateCS(long long cardNumber, int length)
             {
                 checkSum += doubled;
             }
-            isFirst = true;
+            isEven = false;
         }
-    } while (tailDigits != 0);
+        else
+        {
+            checkSum += lastDigit;
+            isEven = true;
+        }
+    } while (initDigits != 0);
     
     return checkSum;
 }
 
 void checkCSFor(int checkSum, string name)
-{
-    //printf("CS: %d\n", checkSum);
-    
+{    
     if (checkSum % 10 != 0)
     {
         printf("INVALID\n");
